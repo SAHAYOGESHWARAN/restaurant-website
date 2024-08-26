@@ -7,6 +7,8 @@ const galleryRoutes = require('./routes/galleryRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const db = require('./config/db');
+require('dotenv').config();
+
 
 const app = express();
 
@@ -30,5 +32,14 @@ app.use('/rooms', roomRoutes);
 // Static folder
 app.use(express.static(path.join(__dirname, 'frontend')));
 
+// Load environment variables
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
+
+// Database connection
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
+
+// Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
